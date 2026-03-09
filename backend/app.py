@@ -3,11 +3,14 @@ from flask_cors import CORS
 import numpy as np
 import cv2
 import base64
+import tensorflow as tf
 from keras.models import load_model
 
-app = Flask(__name__)
+tf.config.set_visible_devices([], 'GPU')
+tf.config.threading.set_intra_op_parallelism_threads(1)
+tf.config.threading.set_inter_op_parallelism_threads(1)
 
-# allow frontend access
+app = Flask(__name__)
 CORS(app)
 
 # limit upload size (16MB)
