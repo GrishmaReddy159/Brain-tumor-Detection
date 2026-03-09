@@ -14,7 +14,14 @@ CORS(app)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 
 # load model once at startup
-model = load_model("models/unet_brats_segmentation.keras", compile=False)
+model = None
+
+def get_model():
+    global model
+    if model is None:
+        print("Loading model...")
+        model = load_model("models/unet_brats_segmentation.keras", compile=False)
+    return model
 print("Model loaded successfully")
 
 IMG_SIZE = 128
@@ -49,6 +56,7 @@ def predict():
 
     input_img = preprocess(image)
 
+    model = get_model()
     pred = model.predict(input_img)[0]
 
     # tumor mask
